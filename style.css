@@ -1,0 +1,136 @@
+:root {
+  --T-Surface-Primary: #F2F2F2;
+  --T-Surface-Backdrop: #E0E0E0;
+  --T-Surface-Decoration-Primary: rgba(0, 0, 0, 0.09);
+  --Background-Container-01: rgba(255, 255, 255, 0.5);
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: system-ui, -apple-system, sans-serif;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #202020;
+  color: #fff;
+}
+
+#app {
+  text-align: center;
+}
+
+h1 {
+  margin-bottom: 3rem;
+  font-weight: 300;
+}
+
+.demo-box {
+  width: 100px;
+  height: 100px;
+  background: #e94560;
+  border-radius: 8px;
+}
+
+.asset-background {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  width: 1440px;
+  height: 1024px;
+  max-width: 100%;
+  padding-top: 38px;
+  background-image: url('/assets/base-unlocked.png');
+  background-size: 1440px 1024px;
+  background-position: center;
+  background-repeat: no-repeat;
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.columns-container {
+  position: relative;
+  flex: 1;
+  width: 100%;
+  overflow: hidden;
+}
+
+.shadows-layer,
+.panels-layer {
+  position: absolute;
+  inset: 0;
+  display: flex;
+}
+
+.shadows-layer {
+  z-index: 0;
+}
+
+.panels-layer {
+  z-index: 1;
+}
+
+.shadow-left,
+.shadow-right {
+  position: absolute;
+  top: 0;
+  height: 100%;
+  pointer-events: none;
+  will-change: transform;
+}
+
+.shadow-left {
+  left: calc(50% - 20px);
+  width: 40px;
+  background: linear-gradient(to right, rgba(0, 0, 0, 0.08), transparent);
+}
+
+.shadow-right {
+  right: calc(50% - 15px);
+  width: 25px;
+  background: linear-gradient(to left, rgba(0, 0, 0, 0.05), transparent);
+}
+
+.column-left,
+.column-right {
+  flex: 0 0 50%;
+  background: linear-gradient(180deg, var(--T-Surface-Primary) 0%, var(--T-Surface-Backdrop) 100%);
+  will-change: transform;
+}
+
+.column-left {
+  border-right: 1.5px solid var(--T-Surface-Decoration-Primary);
+}
+
+.column-right {
+  border-left: 1.5px solid var(--Background-Container-01);
+}
+
+.toggle-btn {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  padding: 12px 24px;
+  font-size: 14px;
+  font-weight: 500;
+  color: #fff;
+  background: #3b82f6;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background 0.2s ease;
+  z-index: 1000;
+}
+
+.toggle-btn:hover {
+  background: #2563eb;
+}
+
+.toggle-btn:active {
+  background: #1d4ed8;
+}

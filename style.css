@@ -63,25 +63,49 @@ body {
   z-index: 1;
 }
 
-.shadow-left,
-.shadow-right {
+.shadow-left-caster {
   position: absolute;
   top: 0;
+  left: 50%;
   height: 100%;
   pointer-events: none;
   will-change: transform;
 }
 
-.shadow-left {
-  left: calc(50% - 20px);
-  width: 40px;
-  background: linear-gradient(to right, rgba(0, 0, 0, 0.08), transparent);
+.shadow-edge {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 50px;
+  height: 100%;
+  background: linear-gradient(to right, rgba(0, 0, 0, 0.07), rgba(0, 0, 0, 0.02) 40%, transparent);
+  mask: radial-gradient(ellipse 130px 120px at 15px 50%, transparent 75%, black 100%);
+  -webkit-mask: radial-gradient(ellipse 130px 120px at 15px 50%, transparent 75%, black 100%);
+}
+
+.shadow-circle {
+  position: absolute;
+  top: 50%;
+  left: 15px;
+  width: 200px;
+  height: 200px;
+  translate: -50% -50%;
+  border-radius: 50%;
+  background: rgba(0, 0, 0, 0.12);
+  filter: blur(20px);
+  transform-origin: center;
+  will-change: transform;
 }
 
 .shadow-right {
+  position: absolute;
+  top: 0;
   right: calc(50% - 15px);
   width: 25px;
+  height: 100%;
   background: linear-gradient(to left, rgba(0, 0, 0, 0.05), transparent);
+  pointer-events: none;
+  will-change: transform;
 }
 
 .column-left,
@@ -126,7 +150,6 @@ body {
   border-radius: 50%;
   background: linear-gradient(0deg, rgba(51, 51, 51, 0.90) 0%, rgba(26, 26, 26, 0.90) 100%);
   border: 1.5px solid #FFF;
-  filter: drop-shadow(0 4px 12px rgba(0, 0, 0, 0.10));
   backdrop-filter: blur(8px);
   transform-origin: center;
   will-change: transform;
@@ -192,10 +215,17 @@ body {
   object-fit: contain;
 }
 
-.toggle-btn {
+.controls {
   position: fixed;
   bottom: 24px;
   right: 24px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  z-index: 1000;
+}
+
+.toggle-btn {
   padding: 12px 24px;
   font-size: 14px;
   font-weight: 500;
@@ -205,7 +235,6 @@ body {
   border-radius: 8px;
   cursor: pointer;
   transition: background 0.2s ease;
-  z-index: 1000;
 }
 
 .toggle-btn:hover {
@@ -214,4 +243,60 @@ body {
 
 .toggle-btn:active {
   background: #1d4ed8;
+}
+
+.slider-control {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 16px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
+  backdrop-filter: blur(8px);
+}
+
+.slider-control label {
+  font-size: 13px;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.slider-control input[type="range"] {
+  width: 100px;
+  height: 4px;
+  appearance: none;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 2px;
+  cursor: pointer;
+}
+
+.slider-control input[type="range"]::-webkit-slider-thumb {
+  appearance: none;
+  width: 14px;
+  height: 14px;
+  background: #3b82f6;
+  border-radius: 50%;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.slider-control input[type="range"]::-webkit-slider-thumb:hover {
+  background: #2563eb;
+}
+
+.slider-control input[type="range"]::-moz-range-thumb {
+  width: 14px;
+  height: 14px;
+  background: #3b82f6;
+  border: none;
+  border-radius: 50%;
+  cursor: pointer;
+}
+
+#time-scale-value {
+  min-width: 32px;
+  font-size: 13px;
+  font-weight: 600;
+  color: #fff;
+  text-align: right;
 }

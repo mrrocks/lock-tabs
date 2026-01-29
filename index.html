@@ -11,7 +11,10 @@
       <div class="asset-background">
         <div class="columns-container">
           <div class="shadows-layer">
-            <div class="shadow-left"></div>
+            <div class="shadow-left-caster">
+              <div class="shadow-edge"></div>
+              <div class="shadow-circle"></div>
+            </div>
             <div class="shadow-right"></div>
           </div>
           <div class="panels-layer">
@@ -33,7 +36,14 @@
         </div>
       </div>
     </div>
-    <button id="toggle-btn" class="toggle-btn">Toggle State</button>
+    <div class="controls">
+      <div class="slider-control">
+        <label for="time-scale">Speed</label>
+        <input type="range" id="time-scale" min="0.1" max="3" step="0.1" value="1" />
+        <span id="time-scale-value">1x</span>
+      </div>
+      <button id="toggle-btn" class="toggle-btn">Toggle State</button>
+    </div>
     <script type="module" src="/main.js"></script>
   </body>
 </html>

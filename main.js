@@ -3,10 +3,11 @@ import anime from 'animejs';
 const State = { LOCKED: 'locked', UNLOCKED: 'unlocked' };
 
 const config = {
-  duration: 800,
+  duration: 600,
   easing: 'easeOutCubic',
   collisionBounce: 10,
-  timeScale: 0.8
+  timeScale: 1,
+  panelOffset: 1.08
 };
 
 const t = (ms) => ms * config.timeScale;
@@ -14,7 +15,8 @@ const t = (ms) => ms * config.timeScale;
 const el = {
   columnLeft: document.querySelector('.column-left'),
   columnRight: document.querySelector('.column-right'),
-  shadowLeft: document.querySelector('.shadow-left'),
+  shadowLeftCaster: document.querySelector('.shadow-left-caster'),
+  shadowCircle: document.querySelector('.shadow-circle'),
   shadowRight: document.querySelector('.shadow-right'),
   centerElement: document.querySelector('.center-element'),
   centerBase: document.querySelector('.center-base'),
@@ -24,7 +26,7 @@ const el = {
   centerLabel: document.querySelector('.center-label')
 };
 
-const getColumnWidth = () => el.columnLeft.offsetWidth;
+const getPanelOffset = () => el.columnLeft.offsetWidth * config.panelOffset;
 
 let blobRotations = [];
 
@@ -53,7 +55,7 @@ function stopBlobRotations() {
 
 const animations = {
   [State.LOCKED]: () => {
-    const offset = getColumnWidth();
+    const offset = getPanelOffset();
     stopBlobRotations();
     const exitDuration = t(config.duration * 0.5);
     const panelDelay = exitDuration * 0.6;
@@ -78,14 +80,14 @@ const animations = {
         easing: 'easeInQuad'
       }),
       anime({
-        targets: el.centerBase,
+        targets: [el.centerBase, el.shadowCircle],
         scale: [1, 0.5],
         duration: exitDuration,
         delay: exitDuration * 0.4,
         easing: 'easeInQuad'
       }),
       anime({
-        targets: [el.columnLeft, el.shadowLeft, el.centerElement],
+        targets: [el.columnLeft, el.shadowLeftCaster, el.centerElement],
         translateX: -offset,
         duration: t(config.duration),
         delay: panelDelay,
@@ -111,7 +113,7 @@ const animations = {
     
     return [
       anime({
-        targets: [el.columnLeft, el.shadowLeft, el.centerElement],
+        targets: [el.columnLeft, el.shadowLeftCaster, el.centerElement],
         keyframes: [
           { translateX: 0, duration: t(config.duration * 0.6), easing: 'easeInQuad' },
           { translateX: -config.collisionBounce, duration: t(config.duration * 0.2), easing: 'easeOutQuad' },
@@ -127,7 +129,7 @@ const animations = {
         ]
       }),
       anime({
-        targets: el.centerBase,
+        targets: [el.centerBase, el.shadowCircle],
         scale: [0.4, 1],
         duration: baseDuration,
         easing: 'easeOutBack'
@@ -178,8 +180,17 @@ function createStateMachine(initialState) {
   return { transition, toggle, getState, State };
 }
 
-const stateMachine = createStateMachine(State.UNLOCKED);
-startBlobRotations();
+const stateMachine = createStateMachine(State.LOCKED);
+
+function setInitialOpenState() {
+  const offset = getPanelOffset();
+  anime.set([el.columnLeft, el.shadowLeftCaster, el.centerElement], { translateX: -offset });
+  anime.set([el.columnRight, el.shadowRight], { translateX: offset });
+  anime.set([el.centerBlobs, el.centerIllus, el.centerLabel], { opacity: 0 });
+  anime.set([el.centerBase, el.shadowCircle], { scale: 0.5 });
+}
+
+setInitialOpenState();
 
 document.addEventListener('keydown', (e) => {
   if (e.code === 'Space') {
@@ -189,6 +200,14 @@ document.addEventListener('keydown', (e) => {
 });
 
 document.getElementById('toggle-btn').addEventListener('click', () => stateMachine.toggle());
+
+const timeScaleSlider = document.getElementById('time-scale');
+const timeScaleValue = document.getElementById('time-scale-value');
+
+timeScaleSlider.addEventListener('input', (e) => {
+  config.timeScale = parseFloat(e.target.value);
+  timeScaleValue.textContent = `${config.timeScale}x`;
+});
 
 window.stateMachine = stateMachine;
 window.animConfig = config;

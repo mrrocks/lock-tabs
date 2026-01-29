@@ -221,7 +221,7 @@ body {
   right: 24px;
   display: flex;
   align-items: center;
-  gap: 16px;
+  gap: 8px;
   z-index: 1000;
 }
 

@@ -41,6 +41,15 @@ body {
   overflow: hidden;
 }
 
+.more-menu {
+  position: absolute;
+  top: 48px;
+  right: 12px;
+  z-index: 10;
+  width: 32px;
+  height: 32px;
+}
+
 .columns-container {
   position: relative;
   flex: 1;

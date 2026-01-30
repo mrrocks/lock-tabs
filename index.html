@@ -11,162 +11,37 @@
       <div class="asset-background">
         <div class="columns-container">
 
-          <!-- SHADOW LAYER: Shadows that move with the panels -->
           <div class="shadows-layer">
-
-            <!-- Moves with left panel: translateX from 0 to -panelOffset -->
-            <div class="shadow-left-caster"
-                 data-anim-group="leftPanel"
-                 data-anim-property="translateX">
+            <div class="shadow-left-caster">
               <div class="shadow-edge"></div>
-              <!-- Scales with center base: scale from 0.3 to 1.0 -->
-              <div class="shadow-circle"
-                   data-anim-group="centerBase"
-                   data-anim-property="scale"
-                   data-anim-from="0.3"
-                   data-anim-to="1.0"></div>
+              <div class="shadow-circle"></div>
             </div>
-
-            <!-- Moves with right panel: translateX from 0 to +panelOffset -->
-            <div class="shadow-right"
-                 data-anim-group="rightPanel"
-                 data-anim-property="translateX"></div>
-
+            <div class="shadow-right"></div>
           </div>
 
-          <!-- PANELS LAYER: The two sliding panels -->
           <div class="panels-layer">
-
-            <!-- Left panel: slides left when locking -->
-            <!-- translateX: 0 → -panelOffset (lock) | -panelOffset → 0 with bounce (unlock) -->
-            <div class="column-left"
-                 data-anim-group="leftPanel"
-                 data-anim-property="translateX"
-                 data-anim-duration-lock="600ms"
-                 data-anim-duration-unlock="600ms (360+120+120)"
-                 data-anim-easing-lock="easeOutCubic"
-                 data-anim-easing-unlock="easeInQuad → easeOutQuad → easeInOutQuad"
-                 data-anim-bounce="-10px"></div>
-
-            <!-- Right panel: slides right when locking -->
-            <!-- translateX: 0 → +panelOffset (lock) | +panelOffset → 0 with bounce (unlock) -->
-            <div class="column-right"
-                 data-anim-group="rightPanel"
-                 data-anim-property="translateX"
-                 data-anim-duration-lock="600ms"
-                 data-anim-duration-unlock="600ms (360+120+120)"
-                 data-anim-easing-lock="easeOutCubic"
-                 data-anim-easing-unlock="easeInQuad → easeOutQuad → easeInOutQuad"
-                 data-anim-bounce="+10px"></div>
-
+            <div class="column-left"></div>
+            <div class="column-right"></div>
           </div>
         </div>
 
-        <!-- CENTER ELEMENT: Moves with left panel group -->
-        <!-- Contains the circular base, blobs, and content -->
-        <div class="center-element"
-             data-anim-group="leftPanel"
-             data-anim-property="translateX">
-
-          <!-- BLOBS CONTAINER: Scale + opacity animation -->
-          <!-- Lock: scale 1→0.3, opacity 1→0, duration 300ms, delay 90ms -->
-          <!-- Unlock: scale 0.2→1, opacity 0→1, duration 792ms, delay 100ms, easeOutBack -->
-          <div class="center-blobs"
-               data-anim-property="scale, opacity"
-               data-anim-scale-lock="1 → 0.3"
-               data-anim-scale-unlock="0.2 → 1"
-               data-anim-opacity-lock="1 → 0"
-               data-anim-opacity-unlock="0 → 1"
-               data-anim-duration-lock="300ms"
-               data-anim-duration-unlock="792ms"
-               data-anim-delay-lock="90ms"
-               data-anim-delay-unlock="100ms"
-               data-anim-easing-unlock="easeOutBack">
-
-            <!-- Individual blobs: continuous rotation when unlocked -->
-            <!-- Blob 1: 20s per rotation, clockwise -->
-            <div class="blob blob-1"
-                 data-anim-continuous="rotation"
-                 data-anim-rotation-duration="20000ms"
-                 data-anim-rotation-direction="clockwise"></div>
-
-            <!-- Blob 2: 25s per rotation, counter-clockwise -->
-            <div class="blob blob-2"
-                 data-anim-continuous="rotation"
-                 data-anim-rotation-duration="25000ms"
-                 data-anim-rotation-direction="counterClockwise"></div>
-
-            <!-- Blob 3: 30s per rotation, clockwise -->
-            <div class="blob blob-3"
-                 data-anim-continuous="rotation"
-                 data-anim-rotation-duration="30000ms"
-                 data-anim-rotation-direction="clockwise"></div>
-
+        <div class="center-element">
+          <div class="center-blobs">
+            <div class="blob blob-1"></div>
+            <div class="blob blob-2"></div>
+            <div class="blob blob-3"></div>
           </div>
 
-          <!-- CENTER BASE: The dark circular background -->
-          <!-- Lock: scale 1→0.3, duration 600ms, delay 180ms, easeInQuad -->
-          <!-- Unlock: scale 0.3→1, duration 720ms, easeOutBack -->
-          <div class="center-base"
-               data-anim-group="centerBase"
-               data-anim-property="scale"
-               data-anim-scale-lock="1 → 0.3"
-               data-anim-scale-unlock="0.3 → 1"
-               data-anim-duration-lock="600ms"
-               data-anim-duration-unlock="720ms"
-               data-anim-delay-lock="180ms"
-               data-anim-easing-lock="easeInQuad"
-               data-anim-easing-unlock="easeOutBack"></div>
+          <div class="center-base"></div>
 
-          <!-- CENTER CONTENT: Illustration and label -->
           <div class="center-content">
-
-            <!-- Illustration: translateY + opacity -->
-            <!-- Lock: translateY 0→8, opacity 1→0, duration 150ms, stagger index 0 -->
-            <!-- Unlock: translateY 16→0, opacity 0→1, duration 360ms, delay 504ms, stagger index 0 -->
-            <img class="center-illus"
-                 src="/assets/illus.png"
-                 alt=""
-                 data-anim-property="translateY, opacity"
-                 data-anim-translateY-lock="0 → 8"
-                 data-anim-translateY-unlock="16 → 0"
-                 data-anim-opacity-lock="1 → 0"
-                 data-anim-opacity-unlock="0 → 1"
-                 data-anim-duration-lock="150ms"
-                 data-anim-duration-unlock="360ms"
-                 data-anim-delay-unlock="504ms"
-                 data-anim-stagger-index="0"
-                 data-anim-stagger-lock="30ms"
-                 data-anim-stagger-unlock="60ms"
-                 data-anim-easing-lock="easeInQuad"
-                 data-anim-easing-unlock="easeOutCubic" />
-
-            <!-- Label: translateY + opacity (same as illus but stagger index 1) -->
-            <!-- Lock: translateY 0→8, opacity 1→0, duration 150ms, stagger index 1 (delay +30ms) -->
-            <!-- Unlock: translateY 16→0, opacity 0→1, duration 360ms, delay 504ms+60ms, stagger index 1 -->
-            <img class="center-label"
-                 src="/assets/label.png"
-                 alt="Click to unlock"
-                 data-anim-property="translateY, opacity"
-                 data-anim-translateY-lock="0 → 8"
-                 data-anim-translateY-unlock="16 → 0"
-                 data-anim-opacity-lock="1 → 0"
-                 data-anim-opacity-unlock="0 → 1"
-                 data-anim-duration-lock="150ms"
-                 data-anim-duration-unlock="360ms"
-                 data-anim-delay-unlock="564ms"
-                 data-anim-stagger-index="1"
-                 data-anim-stagger-lock="30ms"
-                 data-anim-stagger-unlock="60ms"
-                 data-anim-easing-lock="easeInQuad"
-                 data-anim-easing-unlock="easeOutCubic" />
-
+            <img class="center-illus" src="/assets/illus.png" alt="" />
+            <img class="center-label" src="/assets/label.png" alt="Click to unlock" />
           </div>
         </div>
       </div>
     </div>
 
-    <!-- DEBUG CONTROLS -->
     <div class="controls">
       <div class="slider-control">
         <label for="time-scale">Speed</label>

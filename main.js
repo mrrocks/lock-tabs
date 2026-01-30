@@ -56,7 +56,7 @@ const getPanelOffset = () => ELEMENTS.columnLeft.offsetWidth * CONFIG.panelOffse
 // SECTION 4: ANIMATION SPECIFICATIONS
 // ============================================================================
 
-const TRANSITION_TO_LOCKED = {
+const TRANSITION_TO_UNLOCKED = {
   phase1_fadeOutContent: {
     targets: [ELEMENTS.centerIllus, ELEMENTS.centerLabel],
     properties: {
@@ -110,7 +110,7 @@ const TRANSITION_TO_LOCKED = {
   }
 };
 
-const TRANSITION_TO_UNLOCKED = {
+const TRANSITION_TO_LOCKED = {
   phase1_slideLeftPanelWithBounce: {
     targets: [ELEMENTS.columnLeft, ELEMENTS.shadowLeftCaster, ELEMENTS.centerElement],
     keyframes: [
@@ -203,13 +203,13 @@ function stopBlobRotations() {
 
 const applyTimeScale = (ms) => ms * CONFIG.timeScale;
 
-function executeTransitionToLocked() {
+function executeTransitionToUnlocked() {
   const panelOffset = getPanelOffset();
   stopBlobRotations();
 
   anime.set(ELEMENTS.centerElement, { opacity: 1 });
 
-  const spec = TRANSITION_TO_LOCKED;
+  const spec = TRANSITION_TO_UNLOCKED;
 
   return [
     anime({
@@ -271,13 +271,13 @@ function executeTransitionToLocked() {
   ];
 }
 
-function executeTransitionToUnlocked() {
+function executeTransitionToLocked() {
   startBlobRotations();
 
   anime.set(ELEMENTS.centerElement, { opacity: 1 });
   anime.set(ELEMENTS.centerBase, { opacity: 1 });
 
-  const spec = TRANSITION_TO_UNLOCKED;
+  const spec = TRANSITION_TO_LOCKED;
   const bounce = CONFIG.collisionBounce;
 
   return [
@@ -380,7 +380,7 @@ function createStateMachine(initialState) {
 // SECTION 8: INITIAL STATE SETUP
 // ============================================================================
 
-const INITIAL_STATE_LOCKED = {
+const INITIAL_STATE_UNLOCKED = {
   leftPanelGroup: { translateX: '-panelOffset' },
   rightPanelGroup: { translateX: '+panelOffset' },
   centerBlobs: { opacity: 0 },
@@ -390,7 +390,7 @@ const INITIAL_STATE_LOCKED = {
   shadowCircle: { scale: 0.3 }
 };
 
-function setInitialLockedState() {
+function setInitialUnlockedState() {
   const panelOffset = getPanelOffset();
 
   anime.set([ELEMENTS.columnLeft, ELEMENTS.shadowLeftCaster, ELEMENTS.centerElement], {
@@ -414,9 +414,9 @@ function setInitialLockedState() {
 // SECTION 9: INITIALIZATION & EVENT HANDLERS
 // ============================================================================
 
-const stateMachine = createStateMachine(State.LOCKED);
+const stateMachine = createStateMachine(State.UNLOCKED);
 
-setInitialLockedState();
+setInitialUnlockedState();
 
 document.addEventListener('keydown', (e) => {
   if (e.code === 'Space') {

@@ -1,8 +1,15 @@
+@property --center-base-opacity {
+  syntax: '<number>';
+  initial-value: 1;
+  inherits: true;
+}
+
 :root {
   --T-Surface-Primary: #F2F2F2;
   --T-Surface-Backdrop: #E0E0E0;
   --T-Surface-Decoration-Primary: rgba(0, 0, 0, 0.09);
   --Background-Container-01: rgba(255, 255, 255, 0.5);
+  --center-base-opacity: 1;
 }
 
 * {
@@ -183,7 +190,7 @@ body {
   width: 198px;
   height: 198px;
   border-radius: 50%;
-  background: linear-gradient(0deg, rgba(51, 51, 51, 0.90) 0%, rgba(26, 26, 26, 0.90) 100%);
+  background: linear-gradient(0deg, rgb(51 51 51 / var(--center-base-opacity)) 0%, rgb(26 26 26 / var(--center-base-opacity)) 100%);
   border: 1.5px solid #FFF;
   backdrop-filter: blur(8px);
   transform-origin: center;

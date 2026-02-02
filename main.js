@@ -91,6 +91,16 @@ function transitionToLocked() {
       easing: 'easeOutCubic'
     }),
     anime({
+      targets: { opacity: 0.9 },
+      opacity: 1,
+      duration: scaled(600),
+      delay: scaled(180),
+      easing: 'easeOutCubic',
+      update: (anim) => {
+        document.documentElement.style.setProperty('--center-base-opacity', anim.animations[0].currentValue);
+      }
+    }),
+    anime({
       targets: [el.columnLeft, el.shadowLeftCaster, el.centerElement],
       translateX: -panelOffset,
       duration: scaled(600),
@@ -155,6 +165,16 @@ function transitionToUnlocked() {
       easing: 'easeInQuad'
     }),
     anime({
+      targets: { opacity: 1 },
+      opacity: 0.9,
+      duration: scaled(360),
+      delay: scaled(150),
+      easing: 'easeInQuad',
+      update: (anim) => {
+        document.documentElement.style.setProperty('--center-base-opacity', anim.animations[0].currentValue);
+      }
+    }),
+    anime({
       targets: el.centerBlobs,
       keyframes: [
         { scale: 0, opacity: 0, duration: 0 },
@@ -211,6 +231,7 @@ function setInitialLockedState() {
   anime.set([el.columnRight, el.shadowRight], { translateX: panelOffset });
   anime.set([el.centerBlobs, el.centerIllus, el.centerLabel], { opacity: 0 });
   anime.set([el.centerBase, el.shadowCircle], { scale: 0.5 });
+  document.documentElement.style.setProperty('--center-base-opacity', '1');
 }
 
 const stateMachine = createStateMachine(State.LOCKED);

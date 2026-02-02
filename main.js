@@ -1,11 +1,16 @@
-import anime from 'animejs';
+import { animate, spring, utils } from 'animejs';
 
 const State = { LOCKED: 'locked', UNLOCKED: 'unlocked' };
 
 const CONFIG = {
   timeScale: 1.2,
   collisionBounce: 10,
-  panelOffsetMultiplier: 1.1
+  panelOffsetMultiplier: 1.1,
+  spring: {
+    panel: 0,
+    scale: 0.5,
+    content: 0.15
+  }
 };
 
 const el = {
@@ -28,6 +33,7 @@ const el = {
 
 const getPanelOffset = () => el.columnLeft.offsetWidth * CONFIG.panelOffsetMultiplier;
 const scaled = (ms) => ms * CONFIG.timeScale;
+const springEase = (bounce, ms) => spring({ bounce, duration: scaled(ms) });
 
 function startBlobRotations() {
   const configs = [
@@ -37,77 +43,62 @@ function startBlobRotations() {
   ];
 
   configs.forEach(({ target, degrees, duration }) =>
-    anime({ targets: target, rotate: [0, degrees], duration, easing: 'linear', loop: true })
+    animate(target, { rotate: [0, degrees], duration, ease: 'linear', loop: true })
   );
 }
 
 function transitionToLocked() {
   const panelOffset = getPanelOffset();
 
-  anime.set(el.centerElement, { opacity: 1 });
+  utils.set(el.centerElement, { opacity: 1 });
 
   return [
-    anime({
-      targets: el.faviconLocked,
+    animate(el.faviconLocked, {
       opacity: [1, 0],
-      duration: scaled(200),
-      easing: 'easeInOutQuad'
+      ease: springEase(CONFIG.spring.content, 200)
     }),
-    anime({
-      targets: el.faviconUnlocked,
+    animate(el.faviconUnlocked, {
       opacity: [0, 1],
-      duration: scaled(200),
-      easing: 'easeInOutQuad'
+      ease: springEase(CONFIG.spring.content, 200)
     }),
-    anime({
-      targets: [el.centerLabel, el.centerIllus],
+    animate([el.centerLabel, el.centerIllus], {
       translateY: [0, 8],
       scale: [1, 0.8],
       opacity: [1, 0],
-      duration: scaled(300),
       delay: (_, i) => scaled(i * 120),
-      easing: 'easeInQuad'
+      ease: springEase(CONFIG.spring.content, 300)
     }),
-    anime({
-      targets: el.centerBlobs,
-      keyframes: [
-        { scale: 1, opacity: 1, duration: 0 },
-        { scale: 0.15, opacity: 0.3, duration: scaled(250), easing: 'easeInQuad' },
-        { scale: 0.4, opacity: 0.15, duration: scaled(100), easing: 'easeOutQuad' },
-        { scale: 0.3, opacity: 0, duration: scaled(80), easing: 'easeInOutQuad' }
-      ],
-      delay: scaled(90)
+    animate(el.centerBlobs, {
+      scale: [1, 0.3],
+      opacity: [1, 0],
+      delay: scaled(90),
+      ease: springEase(CONFIG.spring.scale, 400)
     }),
-    anime({
-      targets: [el.centerBase, el.shadowCircle],
+    animate([el.centerBase, el.shadowCircle], {
       scale: [1, 0.5],
-      duration: scaled(600),
       delay: scaled(180),
-      easing: 'easeOutCubic'
+      ease: springEase(CONFIG.spring.scale, 600)
     }),
-    anime({
-      targets: { opacity: 0.9 },
-      opacity: 1,
-      duration: scaled(600),
-      delay: scaled(180),
-      easing: 'easeOutCubic',
-      update: (anim) => {
-        document.documentElement.style.setProperty('--center-base-opacity', anim.animations[0].currentValue);
-      }
-    }),
-    anime({
-      targets: [el.columnLeft, el.shadowLeftCaster, el.centerElement],
+    (() => {
+      const state = { opacity: 0.9 };
+      return animate(state, {
+        opacity: 1,
+        delay: scaled(180),
+        ease: springEase(CONFIG.spring.content, 600),
+        onUpdate: () => {
+          document.documentElement.style.setProperty('--center-base-opacity', state.opacity);
+        }
+      });
+    })(),
+    animate([el.columnLeft, el.shadowLeftCaster, el.centerElement], {
       translateX: -panelOffset,
-      duration: scaled(600),
       delay: scaled(180),
-      easing: 'easeOutCubic'
+      ease: springEase(CONFIG.spring.panel, 600)
     }),
-    anime({
-      targets: [el.columnRight, el.shadowRight],
+    animate([el.columnRight, el.shadowRight], {
       translateX: panelOffset,
-      duration: scaled(600),
       delay: scaled(180),
-      easing: 'easeOutCubic'
+      ease: springEase(CONFIG.spring.panel, 600)
     })
   ];
 }
@@ -115,105 +106,104 @@ function transitionToLocked() {
 function transitionToUnlocked() {
   const bounce = CONFIG.collisionBounce;
 
-  anime.set(el.centerElement, { opacity: 1 });
-  anime.set(el.centerBase, { opacity: 1 });
+  utils.set(el.centerElement, { opacity: 1 });
+  utils.set(el.centerBase, { opacity: 1 });
 
   return [
-    anime({
-      targets: el.faviconUnlocked,
+    animate(el.faviconUnlocked, {
       opacity: [1, 0],
-      duration: scaled(200),
       delay: scaled(400),
-      easing: 'easeInOutQuad'
+      ease: springEase(CONFIG.spring.content, 200)
     }),
-    anime({
-      targets: el.faviconLocked,
+    animate(el.faviconLocked, {
       opacity: [0, 1],
-      duration: scaled(200),
       delay: scaled(400),
-      easing: 'easeInOutQuad'
+      ease: springEase(CONFIG.spring.content, 200)
     }),
-    anime({
-      targets: [el.columnLeft, el.shadowLeftCaster, el.centerElement],
+    animate([el.columnLeft, el.shadowLeftCaster, el.centerElement], {
       keyframes: [
-        { translateX: 0, duration: scaled(360), easing: 'easeInQuad' },
-        { translateX: -bounce, duration: scaled(120), easing: 'easeOutQuad' },
-        { translateX: 0, duration: scaled(120), easing: 'easeInOutQuad' }
+        { translateX: 0, duration: scaled(360), ease: 'inQuad' },
+        { translateX: -bounce, duration: scaled(120), ease: 'outQuad' },
+        { translateX: 0, duration: scaled(120), ease: 'inOutQuad' }
       ],
       delay: scaled(150)
     }),
-    anime({
-      targets: [el.columnRight, el.shadowRight],
+    animate([el.columnRight, el.shadowRight], {
       keyframes: [
-        { translateX: 0, duration: scaled(360), easing: 'easeInQuad' },
-        { translateX: bounce, duration: scaled(120), easing: 'easeOutQuad' },
-        { translateX: 0, duration: scaled(120), easing: 'easeInOutQuad' }
+        { translateX: 0, duration: scaled(360), ease: 'inQuad' },
+        { translateX: bounce, duration: scaled(120), ease: 'outQuad' },
+        { translateX: 0, duration: scaled(120), ease: 'inOutQuad' }
       ],
       delay: scaled(150)
     }),
-    anime({
-      targets: [el.centerBase, el.shadowCircle],
+    animate([el.centerBase, el.shadowCircle], {
       scale: [0.5, 1],
-      duration: scaled(360),
       delay: scaled(150),
-      easing: 'easeInQuad'
+      ease: springEase(CONFIG.spring.scale, 500)
     }),
-    anime({
-      targets: { opacity: 1 },
-      opacity: 0.9,
-      duration: scaled(360),
-      delay: scaled(150),
-      easing: 'easeInQuad',
-      update: (anim) => {
-        document.documentElement.style.setProperty('--center-base-opacity', anim.animations[0].currentValue);
-      }
+    (() => {
+      const state = { opacity: 1 };
+      return animate(state, {
+        opacity: 0.9,
+        delay: scaled(150),
+        ease: springEase(CONFIG.spring.content, 360),
+        onUpdate: () => {
+          document.documentElement.style.setProperty('--center-base-opacity', state.opacity);
+        }
+      });
+    })(),
+    animate(el.centerBlobs, {
+      scale: [0, 1],
+      opacity: [0, 1],
+      delay: scaled(400),
+      ease: springEase(CONFIG.spring.scale, 400)
     }),
-    anime({
-      targets: el.centerBlobs,
-      keyframes: [
-        { scale: 0, opacity: 0, duration: 0 },
-        { scale: 1.12, opacity: 1, duration: scaled(300), easing: 'easeOutCubic' },
-        { scale: 1, duration: scaled(200), easing: 'easeInOutQuad' }
-      ],
-      delay: scaled(400)
-    }),
-    anime({
-      targets: [el.centerIllus, el.centerLabel],
+    animate([el.centerIllus, el.centerLabel], {
       translateY: [32, 0],
       scale: [0.8, 1],
       opacity: [0, 1],
-      duration: scaled(460),
       delay: (_, i) => scaled(400 + i * 60),
-      easing: 'easeOutCubic'
+      ease: springEase(CONFIG.spring.content, 460)
     })
   ];
 }
 
 function createStateMachine(initialState) {
   let currentState = initialState;
-  let isTransitioning = false;
+  let targetState = initialState;
+  let runningAnimations = [];
 
   const executors = {
     [State.LOCKED]: transitionToLocked,
     [State.UNLOCKED]: transitionToUnlocked
   };
 
-  async function transition(targetState) {
-    if (isTransitioning || currentState === targetState) return;
+  function cancelRunning() {
+    runningAnimations.forEach(anim => anim.cancel());
+    runningAnimations = [];
+  }
 
-    isTransitioning = true;
+  async function transition(newTarget) {
+    if (newTarget === targetState) return;
+
+    cancelRunning();
+    targetState = newTarget;
+
     const animations = executors[targetState]?.() ?? [];
-    await Promise.all(animations.map(anim => anim.finished));
+    runningAnimations = animations;
 
-    currentState = targetState;
-    isTransitioning = false;
+    await Promise.all(animations);
 
-    document.dispatchEvent(new CustomEvent('statechange', { detail: { state: currentState } }));
+    if (targetState === newTarget) {
+      currentState = targetState;
+      runningAnimations = [];
+      document.dispatchEvent(new CustomEvent('statechange', { detail: { state: currentState } }));
+    }
   }
 
   return {
     transition,
-    toggle: () => transition(currentState === State.LOCKED ? State.UNLOCKED : State.LOCKED),
+    toggle: () => transition(targetState === State.LOCKED ? State.UNLOCKED : State.LOCKED),
     getState: () => currentState,
     State
   };
@@ -222,10 +212,10 @@ function createStateMachine(initialState) {
 function setInitialLockedState() {
   const panelOffset = getPanelOffset();
 
-  anime.set([el.columnLeft, el.shadowLeftCaster, el.centerElement], { translateX: -panelOffset });
-  anime.set([el.columnRight, el.shadowRight], { translateX: panelOffset });
-  anime.set([el.centerBlobs, el.centerIllus, el.centerLabel], { opacity: 0 });
-  anime.set([el.centerBase, el.shadowCircle], { scale: 0.5 });
+  utils.set([el.columnLeft, el.shadowLeftCaster, el.centerElement], { translateX: -panelOffset });
+  utils.set([el.columnRight, el.shadowRight], { translateX: panelOffset });
+  utils.set([el.centerBlobs, el.centerIllus, el.centerLabel], { opacity: 0 });
+  utils.set([el.centerBase, el.shadowCircle], { scale: 0.5 });
   document.documentElement.style.setProperty('--center-base-opacity', '1');
 }
 

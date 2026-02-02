@@ -120,7 +120,7 @@ body {
   left: 0;
   width: 50px;
   height: 100%;
-  background: linear-gradient(to right, rgba(0, 0, 0, 0.07), rgba(0, 0, 0, 0.02) 40%, transparent);
+  background: linear-gradient(to right, rgba(0, 0, 0, 0.14), rgba(0, 0, 0, 0.05) 40%, transparent);
   mask: radial-gradient(ellipse 130px 120px at 15px 50%, transparent 75%, black 100%);
   -webkit-mask: radial-gradient(ellipse 130px 120px at 15px 50%, transparent 75%, black 100%);
 }
@@ -133,7 +133,7 @@ body {
   height: 200px;
   translate: -50% -50%;
   border-radius: 50%;
-  background: rgba(0, 0, 0, 0.12);
+  background: rgba(0, 0, 0, 0.22);
   filter: blur(20px);
   transform-origin: center;
   will-change: transform;
@@ -229,9 +229,9 @@ body {
   position: absolute;
   top: 0;
   left: 0;
-  width: 118px;
-  height: 92px;
-  margin: -46px 0 0 -59px;
+  width: 118.5px;
+  height: 92.5px;
+  margin: -46.25px 0 0 -59.25px;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -243,18 +243,18 @@ body {
 .center-label {
   will-change: transform, opacity;
   flex-shrink: 0;
+  image-rendering: -webkit-optimize-contrast;
+  image-rendering: crisp-edges;
 }
 
 .center-illus {
-  width: 118px;
-  height: 68px;
-  object-fit: contain;
+  width: 118.5px;
+  height: 69px;
 }
 
 .center-label {
-  width: 101px;
-  height: 12px;
-  object-fit: contain;
+  width: 101.5px;
+  height: 11.5px;
 }
 
 .controls {

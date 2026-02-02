@@ -41,6 +41,32 @@ body {
   overflow: hidden;
 }
 
+.favicon-container {
+  position: absolute;
+  top: 11px;
+  left: 86px;
+  z-index: 10;
+  width: 16px;
+  height: 16px;
+}
+
+.favicon {
+  position: absolute;
+  inset: 0;
+  width: 16px;
+  height: 16px;
+  object-fit: contain;
+  will-change: opacity;
+}
+
+.favicon-locked {
+  opacity: 0;
+}
+
+.favicon-unlocked {
+  opacity: 1;
+}
+
 .more-menu {
   position: absolute;
   top: 48px;

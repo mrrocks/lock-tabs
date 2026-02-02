@@ -21,7 +21,9 @@ const el = {
   blob2: document.querySelector('.blob-2'),
   blob3: document.querySelector('.blob-3'),
   centerIllus: document.querySelector('.center-illus'),
-  centerLabel: document.querySelector('.center-label')
+  centerLabel: document.querySelector('.center-label'),
+  faviconLocked: document.querySelector('.favicon-locked'),
+  faviconUnlocked: document.querySelector('.favicon-unlocked')
 };
 
 const getPanelOffset = () => el.columnLeft.offsetWidth * CONFIG.panelOffsetMultiplier;
@@ -53,6 +55,18 @@ function transitionToLocked() {
   anime.set(el.centerElement, { opacity: 1 });
 
   return [
+    anime({
+      targets: el.faviconLocked,
+      opacity: [1, 0],
+      duration: scaled(200),
+      easing: 'easeInOutQuad'
+    }),
+    anime({
+      targets: el.faviconUnlocked,
+      opacity: [0, 1],
+      duration: scaled(200),
+      easing: 'easeInOutQuad'
+    }),
     anime({
       targets: [el.centerLabel, el.centerIllus],
       translateY: [0, 8],
@@ -101,6 +115,20 @@ function transitionToUnlocked() {
   anime.set(el.centerBase, { opacity: 1 });
 
   return [
+    anime({
+      targets: el.faviconUnlocked,
+      opacity: [1, 0],
+      duration: scaled(200),
+      delay: scaled(400),
+      easing: 'easeInOutQuad'
+    }),
+    anime({
+      targets: el.faviconLocked,
+      opacity: [0, 1],
+      duration: scaled(200),
+      delay: scaled(400),
+      easing: 'easeInOutQuad'
+    }),
     anime({
       targets: [el.columnLeft, el.shadowLeftCaster, el.centerElement],
       keyframes: [

@@ -143,14 +143,14 @@ function transitionToLocked() {
     animate([el.centerBase, el.shadowCircle], {
       scale: [0.5, 1],
       delay: scaled(150),
-      ease: springEase(CONFIG.spring.scale, 360)
+      ease: springEase(CONFIG.spring.scale, 600)
     }),
     (() => {
       const state = { opacity: 1 };
       return animate(state, {
         opacity: 0.9,
         delay: scaled(150),
-        ease: springEase(CONFIG.spring.content, 360),
+        ease: springEase(CONFIG.spring.content, 600),
         onUpdate: () => {
           document.documentElement.style.setProperty('--center-base-opacity', state.opacity);
         }

@@ -47,7 +47,7 @@ function startBlobRotations() {
   );
 }
 
-function transitionToLocked() {
+function transitionToUnlocked() {
   const panelOffset = getPanelOffset();
 
   utils.set(el.centerElement, { opacity: 1 });
@@ -69,10 +69,14 @@ function transitionToLocked() {
       ease: springEase(CONFIG.spring.content, 300)
     }),
     animate(el.centerBlobs, {
-      scale: [1, 0.3],
+      scale: [1, 0.8],
+      delay: scaled(90),
+      ease: springEase(CONFIG.spring.scale, 800)
+    }),
+    animate(el.centerBlobs, {
       opacity: [1, 0],
       delay: scaled(90),
-      ease: springEase(CONFIG.spring.scale, 400)
+      ease: springEase(CONFIG.spring.scale, 800)
     }),
     animate([el.centerBase, el.shadowCircle], {
       scale: [1, 0.5],
@@ -84,7 +88,7 @@ function transitionToLocked() {
       return animate(state, {
         opacity: 1,
         delay: scaled(180),
-        ease: springEase(CONFIG.spring.content, 600),
+        ease: springEase(CONFIG.spring.panel, 600),
         onUpdate: () => {
           document.documentElement.style.setProperty('--center-base-opacity', state.opacity);
         }
@@ -103,7 +107,7 @@ function transitionToLocked() {
   ];
 }
 
-function transitionToUnlocked() {
+function transitionToLocked() {
   const bounce = CONFIG.collisionBounce;
 
   utils.set(el.centerElement, { opacity: 1 });
@@ -139,7 +143,7 @@ function transitionToUnlocked() {
     animate([el.centerBase, el.shadowCircle], {
       scale: [0.5, 1],
       delay: scaled(150),
-      ease: springEase(CONFIG.spring.scale, 500)
+      ease: springEase(CONFIG.spring.scale, 360)
     }),
     (() => {
       const state = { opacity: 1 };
@@ -155,8 +159,8 @@ function transitionToUnlocked() {
     animate(el.centerBlobs, {
       scale: [0, 1],
       opacity: [0, 1],
-      delay: scaled(400),
-      ease: springEase(CONFIG.spring.scale, 400)
+      delay: scaled(300),
+      ease: springEase(CONFIG.spring.scale + 0.05, 600)
     }),
     animate([el.centerIllus, el.centerLabel], {
       translateY: [32, 0],
@@ -209,7 +213,7 @@ function createStateMachine(initialState) {
   };
 }
 
-function setInitialLockedState() {
+function setInitialUnlockedState() {
   const panelOffset = getPanelOffset();
 
   utils.set([el.columnLeft, el.shadowLeftCaster, el.centerElement], { translateX: -panelOffset });
@@ -219,8 +223,8 @@ function setInitialLockedState() {
   document.documentElement.style.setProperty('--center-base-opacity', '1');
 }
 
-const stateMachine = createStateMachine(State.LOCKED);
-setInitialLockedState();
+const stateMachine = createStateMachine(State.UNLOCKED);
+setInitialUnlockedState();
 startBlobRotations();
 
 document.addEventListener('keydown', (e) => {

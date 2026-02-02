@@ -3,9 +3,9 @@ import anime from 'animejs';
 const State = { LOCKED: 'locked', UNLOCKED: 'unlocked' };
 
 const CONFIG = {
-  timeScale: 1,
+  timeScale: 1.2,
   collisionBounce: 10,
-  panelOffsetMultiplier: 1.08
+  panelOffsetMultiplier: 1.1
 };
 
 const el = {
@@ -29,28 +29,20 @@ const el = {
 const getPanelOffset = () => el.columnLeft.offsetWidth * CONFIG.panelOffsetMultiplier;
 const scaled = (ms) => ms * CONFIG.timeScale;
 
-let blobAnimations = [];
-
 function startBlobRotations() {
   const configs = [
-    { target: el.blob1, degrees: 360, duration: 20000 },
-    { target: el.blob2, degrees: -360, duration: 25000 },
-    { target: el.blob3, degrees: 360, duration: 30000 }
+    { target: el.blob1, degrees: 360, duration: 8000 },
+    { target: el.blob2, degrees: -360, duration: 10000 },
+    { target: el.blob3, degrees: 360, duration: 12000 }
   ];
 
-  blobAnimations = configs.map(({ target, degrees, duration }) =>
+  configs.forEach(({ target, degrees, duration }) =>
     anime({ targets: target, rotate: [0, degrees], duration, easing: 'linear', loop: true })
   );
 }
 
-function stopBlobRotations() {
-  blobAnimations.forEach(anim => anim.pause());
-  blobAnimations = [];
-}
-
 function transitionToLocked() {
   const panelOffset = getPanelOffset();
-  stopBlobRotations();
 
   anime.set(el.centerElement, { opacity: 1 });
 
@@ -70,18 +62,21 @@ function transitionToLocked() {
     anime({
       targets: [el.centerLabel, el.centerIllus],
       translateY: [0, 8],
+      scale: [1, 0.8],
       opacity: [1, 0],
-      duration: scaled(150),
+      duration: scaled(300),
       delay: (_, i) => scaled(i * 120),
       easing: 'easeInQuad'
     }),
     anime({
       targets: el.centerBlobs,
-      scale: [1, 0.3],
-      opacity: [1, 0],
-      duration: scaled(300),
-      delay: scaled(90),
-      easing: 'easeInQuad'
+      keyframes: [
+        { scale: 1, opacity: 1, duration: 0 },
+        { scale: 0.15, opacity: 0.3, duration: scaled(250), easing: 'easeInQuad' },
+        { scale: 0.4, opacity: 0.15, duration: scaled(100), easing: 'easeOutQuad' },
+        { scale: 0.3, opacity: 0, duration: scaled(80), easing: 'easeInOutQuad' }
+      ],
+      delay: scaled(90)
     }),
     anime({
       targets: [el.centerBase, el.shadowCircle],
@@ -119,7 +114,6 @@ function transitionToLocked() {
 
 function transitionToUnlocked() {
   const bounce = CONFIG.collisionBounce;
-  startBlobRotations();
 
   anime.set(el.centerElement, { opacity: 1 });
   anime.set(el.centerBase, { opacity: 1 });
@@ -186,6 +180,7 @@ function transitionToUnlocked() {
     anime({
       targets: [el.centerIllus, el.centerLabel],
       translateY: [32, 0],
+      scale: [0.8, 1],
       opacity: [0, 1],
       duration: scaled(460),
       delay: (_, i) => scaled(400 + i * 60),
@@ -236,6 +231,7 @@ function setInitialLockedState() {
 
 const stateMachine = createStateMachine(State.LOCKED);
 setInitialLockedState();
+startBlobRotations();
 
 document.addEventListener('keydown', (e) => {
   if (e.code === 'Space') {

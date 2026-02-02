@@ -30,6 +30,7 @@ body {
 
 #app {
   text-align: center;
+  margin-top: -32px;
 }
 
 .asset-background {
@@ -134,7 +135,7 @@ body {
   translate: -50% -50%;
   border-radius: 50%;
   background: rgba(0, 0, 0, 0.22);
-  filter: blur(20px);
+  filter: blur(35px);
   transform-origin: center;
   will-change: transform;
 }
@@ -265,6 +266,8 @@ body {
   align-items: center;
   gap: 8px;
   z-index: 1000;
+  padding: 8px;
+  border-radius: 12px;
 }
 
 .toggle-btn {
@@ -292,7 +295,7 @@ body {
   align-items: center;
   gap: 10px;
   padding: 12px 16px;
-  background: rgba(255, 255, 255, 0.1);
+  background: rgba(0, 0, 0, 0.8);
   border-radius: 8px;
   backdrop-filter: blur(8px);
 }
